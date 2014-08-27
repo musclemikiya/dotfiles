@@ -11,7 +11,6 @@ set number
 set t_Co=256
 set background=dark
 set lazyredraw
-set binary
 set noeol
 set cursorline
 set statusline=2
