@@ -17,6 +17,24 @@ set statusline=2
 colorscheme molokai
 syntax enable
 
+"タブ、空白、改行の可視化
+set list
+set listchars=tab:>.,trail:_,extends:>,precedes:<,nbsp:%
+
+"全角スペースをハイライト表示
+function! ZenkakuSpace()
+    highlight ZenkakuSpace cterm=reverse ctermfg=DarkMagenta gui=reverse guifg=DarkMagenta
+endfunction
+   
+if has('syntax')
+    augroup ZenkakuSpace
+        autocmd!
+        autocmd ColorScheme       * call ZenkakuSpace()
+        autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
+    augroup END
+    call ZenkakuSpace()
+endif
+
 "-------------------------------
 " neo bundle
 "-------------------------------
@@ -26,10 +44,11 @@ if has('vim_starting')
 set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#rc(expand('~/.vim/bundle/'))
+"call neobundle#rc()
+call neobundle#begin(expand('~/.vim/bundle/'))
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
-
+call neobundle#end()
 filetype plugin indent on     " Required!
 
 
@@ -53,6 +72,7 @@ NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'vcscommand.vim'
+NeoBundle 'PDV--phpDocumentor-for-Vim'
 " //Installation check.
 
 " Disable AutoComplPop.
@@ -97,3 +117,8 @@ map <C-h> gT
 map <C-w> :w<CR>
 map <C-e> :q!<CR>
 map <C-b> :VimShell<CR>
+
+" PHPDoc
+inoremap <C-C> <Esc>:call PhpDocSingle()<CR>i
+nnoremap <C-C> :call PhpDocSingle()<CR>
+vnoremap <C-C> :call PhpDocSingle()<CR>exit
