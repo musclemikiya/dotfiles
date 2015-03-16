@@ -13,7 +13,10 @@ set background=dark
 set lazyredraw
 set noeol
 set cursorline
-set statusline=2
+set laststatus=2
+set statusline=%<%f\ %m%r%h%w
+set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']['.&fileformat.']'}
+set statusline+=%=%l/%L,%c%V%8P
 colorscheme molokai
 syntax enable
 
@@ -122,3 +125,8 @@ map <C-b> :VimShell<CR>
 inoremap <C-C> <Esc>:call PhpDocSingle()<CR>i
 nnoremap <C-C> :call PhpDocSingle()<CR>
 vnoremap <C-C> :call PhpDocSingle()<CR>exit
+
+" 括弧
+inoremap {<Enter> {}<Left><CR><ESC><S-o>
+inoremap [<Enter> []<Left><CR><ESC><S-o>
+inoremap (<Enter> ()<Left><CR><ESC><S-o>
