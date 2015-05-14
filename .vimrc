@@ -1,3 +1,4 @@
+set title
 set autoindent
 set smartindent
 set fencs=utf-8,shift-jis,euc-jp,latin1
@@ -11,7 +12,6 @@ set number
 set t_Co=256
 set background=dark
 set lazyredraw
-set binary
 set noeol
 set cursorline
 set statusline=2
@@ -54,7 +54,14 @@ NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'vcscommand.vim'
+NeoBundle 'kannokanno/previm'
+NeoBundle 'tyru/open-browser.vim'
+NeoBundle 'tokorom/clang_complete'
+NeoBundle 'tokorom/clang_complete-getopts-ios'
+NeoBundle 'kchmck/vim-coffee-script'
 " //Installation check.
+
+au BufRead,BufNewFile *.md set filetype=markdown
 
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
@@ -70,6 +77,7 @@ let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 let g:neocomplcache_dictionary_filetype_lists = {
     \ 'default' : ''
     \ }
+
 
 " Plugin key-mappings.
 inoremap <expr><C-g>     neocomplcache#undo_completion()
@@ -92,9 +100,10 @@ inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
 "NerdTree
 nmap <C-n> :NERDTreeToggle<CR>
+nmap <C-m> <C-W>h
 " 移動とか保存とか
 map <C-l> gt
 map <C-h> gT
-map <C-w> :w<CR>
+map <C-k> :w<CR>
 map <C-e> :q!<CR>
 map <C-b> :VimShell<CR>
