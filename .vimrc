@@ -13,9 +13,30 @@ set background=dark
 set lazyredraw
 set noeol
 set cursorline
-set statusline=2
+set laststatus=2
+set statusline=%<%f\ %m%r%h%w
+set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']['.&fileformat.']'}
+set statusline+=%=%l/%L,%c%V%8P
 colorscheme molokai
 syntax enable
+
+"タブ、空白、改行の可視化
+set list
+set listchars=tab:>.,trail:_,extends:>,precedes:<,nbsp:%
+
+"全角スペースをハイライト表示
+function! ZenkakuSpace()
+    highlight ZenkakuSpace cterm=reverse ctermfg=DarkMagenta gui=reverse guifg=DarkMagenta
+endfunction
+   
+if has('syntax')
+    augroup ZenkakuSpace
+        autocmd!
+        autocmd ColorScheme       * call ZenkakuSpace()
+        autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
+    augroup END
+    call ZenkakuSpace()
+endif
 
 "-------------------------------
 " neo bundle
@@ -28,7 +49,6 @@ endif
 
 call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
-
 filetype plugin indent on     " Required!
 
 
@@ -54,6 +74,8 @@ NeoBundle 'Shougo/vimshell'
 NeoBundle 'vcscommand.vim'
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'PDV--phpDocumentor-for-Vim'
+
 " //Installation check.
 call neobundle#end()
 
@@ -105,3 +127,13 @@ map <C-h> gT
 map <C-w> :w<CR>
 map <C-e> :q!<CR>
 map <C-b> :VimShell<CR>
+
+" PHPDoc
+inoremap <C-C> <Esc>:call PhpDocSingle()<CR>i
+nnoremap <C-C> :call PhpDocSingle()<CR>
+vnoremap <C-C> :call PhpDocSingle()<CR>exit
+
+" 括弧
+inoremap {<Enter> {}<Left><CR><ESC><S-o>
+inoremap [<Enter> []<Left><CR><ESC><S-o>
+inoremap (<Enter> ()<Left><CR><ESC><S-o>
