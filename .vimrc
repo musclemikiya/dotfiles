@@ -14,9 +14,30 @@ set background=dark
 set lazyredraw
 set noeol
 set cursorline
-set statusline=2
+set laststatus=2
+set statusline=%<%f\ %m%r%h%w
+set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']['.&fileformat.']'}
+set statusline+=%=%l/%L,%c%V%8P
 colorscheme molokai
 syntax enable
+
+"タブ、空白、改行の可視化
+set list
+set listchars=tab:>.,trail:_,extends:>,precedes:<,nbsp:%
+
+"全角スペースをハイライト表示
+function! ZenkakuSpace()
+    highlight ZenkakuSpace cterm=reverse ctermfg=DarkMagenta gui=reverse guifg=DarkMagenta
+endfunction
+   
+if has('syntax')
+    augroup ZenkakuSpace
+        autocmd!
+        autocmd ColorScheme       * call ZenkakuSpace()
+        autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
+    augroup END
+    call ZenkakuSpace()
+endif
 
 "-------------------------------
 " neo bundle
@@ -27,10 +48,8 @@ if has('vim_starting')
 set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#rc(expand('~/.vim/bundle/'))
-" Let NeoBundle manage NeoBundle
+call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
-
 filetype plugin indent on     " Required!
 
 
@@ -54,12 +73,12 @@ NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'vcscommand.vim'
-NeoBundle 'kannokanno/previm'
-NeoBundle 'tyru/open-browser.vim'
-NeoBundle 'tokorom/clang_complete'
-NeoBundle 'tokorom/clang_complete-getopts-ios'
+NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'PDV--phpDocumentor-for-Vim'
+
 " //Installation check.
+call neobundle#end()
 
 au BufRead,BufNewFile *.md set filetype=markdown
 
@@ -77,11 +96,17 @@ let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 let g:neocomplcache_dictionary_filetype_lists = {
     \ 'default' : ''
     \ }
+" Set jsx syntax also .js
+let g:jsx_ext_required = 0
 
 
 " Plugin key-mappings.
 inoremap <expr><C-g>     neocomplcache#undo_completion()
 inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+" Coffee Scritptのsyntax
+au BufRead,BufNewFile,BufReadPre *.coffee   set filetype=coffee
+autocmd FileType coffee    setlocal sw=2 sts=2 ts=2 et
 
 " Recommended key-mappings.
 " <CR>: close popup and save indent.
@@ -107,3 +132,13 @@ map <C-h> gT
 map <C-k> :w<CR>
 map <C-e> :q!<CR>
 map <C-b> :VimShell<CR>
+
+" PHPDoc
+inoremap <C-C> <Esc>:call PhpDocSingle()<CR>i
+nnoremap <C-C> :call PhpDocSingle()<CR>
+vnoremap <C-C> :call PhpDocSingle()<CR>exit
+
+" 括弧
+inoremap {<Enter> {}<Left><CR><ESC><S-o>
+inoremap [<Enter> []<Left><CR><ESC><S-o>
+inoremap (<Enter> ()<Left><CR><ESC><S-o>
