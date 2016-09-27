@@ -29,7 +29,7 @@ set listchars=tab:>.,trail:_,extends:>,precedes:<,nbsp:%
 function! ZenkakuSpace()
     highlight ZenkakuSpace cterm=reverse ctermfg=DarkMagenta gui=reverse guifg=DarkMagenta
 endfunction
-   
+
 if has('syntax')
     augroup ZenkakuSpace
         autocmd!
@@ -76,6 +76,7 @@ NeoBundle 'vcscommand.vim'
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'PDV--phpDocumentor-for-Vim'
+NeoBundle "ctrlpvim/ctrlp.vim"
 
 " //Installation check.
 call neobundle#end()
